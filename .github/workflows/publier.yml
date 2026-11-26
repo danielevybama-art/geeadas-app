@@ -1,0 +1,33 @@
+name: Publier le site
+
+on:
+  push:
+    paths:
+      - 'geead-abidjan-sud.zip'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Remplacer les fichiers du site
+        run: |
+          test -f geead-abidjan-sud.zip || { echo "Archive absente"; exit 0; }
+          rm -rf geeadas-site
+          mkdir geeadas-site
+          unzip -q geead-abidjan-sud.zip -d geeadas-site
+          rm geead-abidjan-sud.zip
+          ls -R geeadas-site | head -60
+
+      - name: Enregistrer la nouvelle version
+        run: |
+          git config user.name "GEEAD ABIDJAN SUD"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Mise en ligne de la nouvelle version du site" || echo "Aucun changement"
+          git push
