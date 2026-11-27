@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'geead-abidjan-sud.zip'
+      - 'geead-abidjan-sud.tar.xz'
   workflow_dispatch:
 
 permissions:
@@ -17,12 +18,41 @@ jobs:
 
       - name: Remplacer les fichiers du site
         run: |
-          test -f geead-abidjan-sud.zip || { echo "Archive absente"; exit 0; }
-          rm -rf geeadas-site
-          mkdir geeadas-site
-          unzip -q geead-abidjan-sud.zip -d geeadas-site
-          rm geead-abidjan-sud.zip
-          ls -R geeadas-site | head -60
+          if [ -f geead-abidjan-sud.zip ]; then A=geead-abidjan-sud.zip
+          elif [ -f geead-abidjan-sud.tar.xz ]; then A=geead-abidjan-sud.tar.xz
+          else echo "Aucune archive à publier"; exit 0; fi
+          rm -rf geeadas-site && mkdir geeadas-site
+          case "$A" in
+            *.zip) unzip -q "$A" -d geeadas-site ;;
+            *) tar -xJf "$A" -C geeadas-site ;;
+          esac
+          rm "$A"
+
+      - name: Compléter les icônes de l'application
+        run: |
+          pip install --quiet pillow
+          python3 - <<'PY'
+          import os
+          from PIL import Image
+          d = 'geeadas-site/assets'
+          logo = Image.open(os.path.join(d, 'logo.png')).convert('RGBA')
+          def icone(nom, taille, largeur):
+              chemin = os.path.join(d, nom)
+              if os.path.exists(chemin):
+                  return
+              largeur = min(largeur, logo.width)
+              hauteur = round(logo.height * largeur / logo.width)
+              img = logo.resize((largeur, hauteur), Image.LANCZOS)
+              fond = Image.new('RGBA', (taille, taille), (255, 255, 255, 255))
+              fond.alpha_composite(img, ((taille - largeur) // 2, (taille - hauteur) // 2))
+              fond.convert('RGB').save(chemin, optimize=True)
+          icone('icon-512.png', 512, 400)
+          icone('maskable-512.png', 512, 320)
+          icone('icon-192.png', 192, 165)
+          icone('apple-touch-icon.png', 180, 151)
+          icone('favicon.png', 64, 58)
+          PY
+          ls -la geeadas-site geeadas-site/assets
 
       - name: Enregistrer la nouvelle version
         run: |
