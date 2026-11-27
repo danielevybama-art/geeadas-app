@@ -1,0 +1,32 @@
+/* GEEAD ABIDJAN SUD — Fondations : couleurs, typographie, réinitialisation */
+
+:root{
+  color-scheme:light dark;
+  --brand:#0b7a3e;--brand-600:#086632;--brand-700:#064f27;--brand-900:#04331a;
+  --brand-50:light-dark(#e9f6ee,#0f2a1a);--brand-100:light-dark(#d2eedc,#14361f);
+  --gold:#f4a51c;--gold-600:#d98b05;--gold-50:light-dark(#fff5e1,#33260c);
+  --red:#d6453d;--red-50:light-dark(#fdecea,#3a1614);--blue:#2a6fdb;--blue-50:light-dark(#e8f0fd,#13233d);
+  --bg:light-dark(#f2f4f1,#0a100c);--surface:light-dark(#ffffff,#121a15);--surface-2:light-dark(#f7f9f6,#18221b);
+  --ink:light-dark(#0d1912,#e9f0eb);--ink-2:light-dark(#3a4a40,#c3cfc7);--mut:light-dark(#6b7a70,#8e9d93);
+  --line:light-dark(#e3e8e3,#223026);--line-2:light-dark(#eef2ee,#1a251e);
+  --shadow-sm:0 1px 2px rgba(10,30,18,.06),0 1px 1px rgba(10,30,18,.04);
+  --shadow:0 1px 2px rgba(10,30,18,.05),0 6px 18px -6px rgba(10,30,18,.12);
+  --shadow-lg:0 24px 60px -12px rgba(4,30,16,.35);
+  --r:18px;--r-sm:12px;--r-xs:9px;
+  --ease:cubic-bezier(.2,.8,.2,1);--spring:cubic-bezier(.34,1.4,.5,1);
+  --font:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
+}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--font);-webkit-font-smoothing:antialiased;overflow-x:clip}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{font-size:16px}
+h1,h2,h3,h4{margin:0;line-height:1.15;letter-spacing:-.02em;text-wrap:balance}
+p{margin:0}
+a{color:var(--brand);text-decoration:none}
+svg.i{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.mono{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-feature-settings:"zero";letter-spacing:.01em}
+.mut{color:var(--mut)}.sm{font-size:13px}.xs{font-size:12px}.b{font-weight:700}
+.hide{display:none!important}
+

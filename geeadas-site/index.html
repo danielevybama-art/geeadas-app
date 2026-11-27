@@ -3,34 +3,57 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>GEEAD Abidjan Sud</title>
-<meta name="description" content="Plateforme de recensement et de gestion des membres du GEEAD Région Abidjan Sud.">
+<title>GEEAD ABIDJAN SUD</title>
+<meta name="description" content="Plateforme des bureaux du GEEAD ABIDJAN SUD : recensement, suivi et accompagnement des élèves et étudiants des Assemblées de Dieu.">
 <meta name="theme-color" content="#04331a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="GEEADAS">
+<meta name="apple-mobile-web-app-title" content="GEEAD ABIDJAN SUD">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="icon-192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/screens.css">
 </head>
 <body>
-<div class="splash" id="splash"><div style="text-align:center"><img id="splimg" alt="GEEAD"><div class="bar"><i></i></div></div></div>
+<div class="splash" id="splash"><div style="text-align:center"><span class="logo-mark xl"><img src="assets/logo.png" alt="GEEAD ABIDJAN SUD"></span><span class="brand">GEEAD ABIDJAN SUD</span><div class="bar"><i></i></div></div></div>
 <div id="root"></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div id="printzone" style="display:none"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="logo.js"></script>
-<script src="data.js"></script>
-<script src="app.js"></script>
-<script src="views.js"></script>
-<script src="patch.js"></script>
+
+<script src="js/config.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/store.js"></script>
+<script src="js/demo.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/shell.js"></script>
+<script src="js/wizard.js"></script>
+<script src="js/views/accueil.js"></script>
+<script src="js/views/membres.js"></script>
+<script src="js/views/inscriptions.js"></script>
+<script src="js/views/acces.js"></script>
+<script src="js/views/cellules.js"></script>
+<script src="js/views/suivi.js"></script>
+<script src="js/views/croissance.js"></script>
+<script src="js/views/communication.js"></script>
+<script src="js/views/journal.js"></script>
+<script src="js/views/donnees.js"></script>
+<script src="js/views/parametres.js"></script>
+<script src="js/views/public.js"></script>
+<script src="js/actions.js"></script>
+<script src="js/auth.js"></script>
 <script>
-try{ if('serviceWorker' in navigator && location.protocol==='https:' && window.self===window.top){ window.addEventListener('load',function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); }); } }catch(e){}
+if('serviceWorker' in navigator && location.protocol==='https:' && window.self===window.top){
+  window.addEventListener('load',function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+}
 </script>
 </body>
 </html>

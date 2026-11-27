@@ -1,9 +1,9 @@
 {
-  "name": "GEEAD Abidjan Sud — Recensement",
-  "short_name": "GEEADAS",
-  "description": "Recensement, suivi et cartes de membre du GEEAD Région Abidjan Sud.",
+  "name": "GEEAD ABIDJAN SUD",
+  "short_name": "GEEAD ABIDJAN SUD",
+  "description": "Plateforme des bureaux du GEEAD ABIDJAN SUD : recensement, suivi et accompagnement des GEEADISTES.",
   "lang": "fr",
-  "start_url": "./#accueil",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -11,12 +11,12 @@
   "theme_color": "#04331a",
   "categories": ["education", "productivity"],
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Nouveau membre", "url": "./#membres", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
-    { "name": "Formulaire d'inscription", "url": "./#inscription", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
+    { "name": "Membres", "url": "./#membres", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Inscription d'un GEEADISTE", "url": "./#inscription", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] }
   ]
 }
