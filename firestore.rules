@@ -1,0 +1,96 @@
+rules_version = '2';
+
+// GEEAD ABIDJAN SUD — Règles de sécurité Firestore
+// Profil (utilisateurs/{uid}) : nom, titre (poste), niveau "regional" | "local", celluleId, acces "complet" | "lecture", actif
+// Demande d'accès (demandes/{uid}) : créée par la personne, validée par l'administrateur (bureau régional)
+// ou par le bureau régional (bureaux locaux).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function connecte() { return request.auth != null; }
+    function emailConnecte() { return connecte() ? request.auth.token.get('email', '').lower() : ''; }
+    function administrateur() { return emailConnecte() == 'danielevybama@gmail.com'; }
+    function aProfil() { return connecte() && exists(/databases/$(database)/documents/utilisateurs/$(request.auth.uid)); }
+    function profil() { return get(/databases/$(database)/documents/utilisateurs/$(request.auth.uid)).data; }
+    function actif() { return aProfil() && profil().get('actif', true) == true; }
+    function regional() { return administrateur() || (actif() && profil().niveau == 'regional'); }
+    function local() { return actif() && profil().niveau == 'local'; }
+    function gestion() { return administrateur() || (actif() && profil().get('acces', 'complet') != 'lecture'); }
+    function maCellule() { return profil().celluleId; }
+    function deMaCellule() { return local() && resource.data.celluleId == maCellule(); }
+    function versMaCellule() { return local() && request.resource.data.celluleId == maCellule(); }
+
+    // Comptes : l'administrateur gère le bureau régional, le bureau régional gère les bureaux locaux
+    match /utilisateurs/{uid} {
+      allow read: if connecte() && (request.auth.uid == uid || regional() || deMaCellule());
+      allow create: if administrateur()
+        || (regional() && gestion() && request.resource.data.niveau == 'local');
+      allow update: if administrateur()
+        || (regional() && gestion() && resource.data.niveau == 'local' && request.resource.data.niveau == 'local');
+      allow delete: if administrateur() || (regional() && gestion() && resource.data.niveau == 'local');
+    }
+
+    // Demandes d'accès
+    match /demandes/{uid} {
+      allow create: if connecte() && request.auth.uid == uid
+        && request.resource.data.statut == 'en_attente'
+        && request.resource.data.niveau in ['regional', 'local']
+        && request.resource.data.nom is string && request.resource.data.nom.size() < 80;
+      allow update: if (connecte() && request.auth.uid == uid && request.resource.data.statut == 'en_attente')
+        || administrateur()
+        || (regional() && gestion() && resource.data.niveau == 'local' && request.resource.data.niveau == 'local');
+      allow read: if connecte() && (request.auth.uid == uid || regional());
+      allow delete: if administrateur() || (connecte() && request.auth.uid == uid)
+        || (regional() && gestion() && resource.data.niveau == 'local');
+    }
+
+    // Cellules : lisibles par tous (formulaires), gérées par le bureau régional
+    match /cellules/{id} {
+      allow read: if true;
+      allow write: if regional() && gestion();
+    }
+
+    // Membres
+    match /membres/{id} {
+      allow read: if regional() || deMaCellule();
+      allow create: if gestion() && (regional() || versMaCellule());
+      allow update: if gestion() && (regional() || deMaCellule());
+      allow delete: if regional() && gestion();
+    }
+
+    // Notes de suivi
+    match /suivis/{id} {
+      allow read: if regional() || deMaCellule();
+      allow create: if gestion() && (regional() || versMaCellule());
+      allow update, delete: if regional() && gestion();
+    }
+
+    // Inscriptions envoyées par le formulaire public
+    match /inscriptions/{id} {
+      allow create: if request.resource.data.keys().hasAll(['nom', 'prenoms', 'telephone', 'consentement'])
+        && request.resource.data.consentement == true
+        && request.resource.data.nom is string && request.resource.data.nom.size() < 80
+        && request.resource.data.get('photo', '').size() < 150000;
+      allow read: if regional() || deMaCellule();
+      allow delete: if gestion() && (regional() || deMaCellule());
+      allow update: if false;
+    }
+
+    // Annonces du bureau régional
+    match /annonces/{id} {
+      allow read: if actif() || administrateur();
+      allow write: if regional() && gestion();
+    }
+
+    // Journal d'activité
+    match /journal/{id} {
+      allow create: if actif() || administrateur();
+      allow read: if regional();
+      allow update, delete: if false;
+    }
+
+    // Compteur des identifiants et paramètres de la région
+    match /meta/compteur { allow read, write: if gestion(); }
+    match /meta/parametres { allow read: if actif() || administrateur(); allow write: if regional() && gestion(); }
+  }
+}
